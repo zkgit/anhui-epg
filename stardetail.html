@@ -1,0 +1,442 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+    <meta content="IE=5.0000" http-equiv="X-UA-Compatible">
+
+    <meta name="page-view-size" content="1280*720">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>明星详情</title>
+    <script src="js/public.js" type="text/javascript"></script>
+    <script src="js/ajax.min.js" type="text/javascript"></script>
+    <script src="config/config.js" type="text/javascript"></script>
+    <script src="js/webxiri_1.0.4.js" type="text/javascript"></script>
+    <script src="js/hd.js" type="text/javascript"></script>
+    <script src="js/common.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var _BS = {};
+        var backUrl = '';
+        var focus_id = 'bt_f0';
+        var buttons = [{
+                id: 'bt_f0',
+                upButtonId: '',
+                downButtonId: '',
+                leftButtonId: 'toleftpageend9',
+                rightButtonId: 'bt_f1',
+                blurFun: 'F_E_IVBLUR',
+                focusFun: 'F_E_IFOCUS',
+                enterFun: 'F_TODETAIL0',
+                focusImage: 'detail-iti-f.png',
+                blurImage: 'Pixel.png'
+            },
+            {
+                id: 'toleftpageend9',
+                upButtonId: '',
+                downButtonId: '',
+                leftButtonId: 'bt_f9',
+                rightButtonId: '',
+                blurFun: '',
+                focusFun: 'F_TOLEFTPAGEEND',
+                enterFun: '',
+                focusImage: 'Pixel.png',
+                blurImage: 'Pixel.png'
+            },
+            {
+                id: 'bt_f1',
+                upButtonId: '',
+                downButtonId: '',
+                leftButtonId: 'bt_f0',
+                rightButtonId: 'bt_f2',
+                blurFun: 'F_E_IVBLUR',
+                focusFun: 'F_E_IFOCUS',
+                enterFun: 'F_TODETAIL1',
+                focusImage: 'detail-iti-f.png',
+                blurImage: 'Pixel.png'
+            },
+            {
+                id: 'bt_f2',
+                upButtonId: '',
+                downButtonId: '',
+                leftButtonId: 'bt_f1',
+                rightButtonId: 'bt_f3',
+                blurFun: 'F_E_IVBLUR',
+                focusFun: 'F_E_IFOCUS',
+                enterFun: 'F_TODETAIL2',
+                focusImage: 'detail-iti-f.png',
+                blurImage: 'Pixel.png'
+            },
+            {
+                id: 'bt_f3',
+                upButtonId: '',
+                downButtonId: '',
+                leftButtonId: 'bt_f2',
+                rightButtonId: 'bt_f4',
+                blurFun: 'F_E_IVBLUR',
+                focusFun: 'F_E_IFOCUS',
+                enterFun: 'F_TODETAIL3',
+                focusImage: 'detail-iti-f.png',
+                blurImage: 'Pixel.png'
+            },
+            {
+                id: 'bt_f4',
+                upButtonId: '',
+                downButtonId: '',
+                leftButtonId: 'bt_f3',
+                rightButtonId: 'bt_f5',
+                blurFun: 'F_E_IVBLUR',
+                focusFun: 'F_E_IFOCUS',
+                enterFun: 'F_TODETAIL4',
+                focusImage: 'detail-iti-f.png',
+                blurImage: 'Pixel.png'
+            },
+            {
+                id: 'bt_f5',
+                upButtonId: '',
+                downButtonId: '',
+                leftButtonId: 'bt_f4',
+                rightButtonId: 'torightpage5',
+                blurFun: 'F_E_IVBLUR',
+                focusFun: 'F_E_IFOCUS',
+                enterFun: 'F_TODETAIL5',
+                focusImage: 'detail-iti-f.png',
+                blurImage: 'Pixel.png'
+            },
+            {
+                id: 'torightpage5',
+                upButtonId: '',
+                downButtonId: '',
+                leftButtonId: '',
+                rightButtonId: 'bt_f6',
+                blurFun: '',
+                focusFun: 'F_TORIGHTPAGE',
+                enterFun: '',
+                focusImage: 'Pixel.png',
+                blurImage: 'Pixel.png'
+            },
+            {
+                id: 'bt_f6',
+                upButtonId: '',
+                downButtonId: '',
+                leftButtonId: 'toleftpage6',
+                rightButtonId: 'bt_f7',
+                blurFun: 'F_E_IVBLUR',
+                focusFun: 'F_E_IFOCUS',
+                enterFun: 'F_TODETAIL6',
+                focusImage: 'detail-iti-f.png',
+                blurImage: 'Pixel.png'
+            },
+            {
+                id: 'toleftpage6',
+                upButtonId: '',
+                downButtonId: '',
+                leftButtonId: 'bt_f5',
+                rightButtonId: '',
+                blurFun: '',
+                focusFun: 'F_TOLEFTPAGE',
+                enterFun: '',
+                focusImage: 'Pixel.png',
+                blurImage: 'Pixel.png'
+            },
+
+            {
+                id: 'bt_f7',
+                upButtonId: '',
+                downButtonId: '',
+                leftButtonId: 'bt_f6',
+                rightButtonId: 'bt_f8',
+                blurFun: 'F_E_IVBLUR',
+                focusFun: 'F_E_IFOCUS',
+                enterFun: 'F_TODETAIL7',
+                focusImage: 'detail-iti-f.png',
+                blurImage: 'Pixel.png'
+            },
+            {
+                id: 'bt_f8',
+                upButtonId: '',
+                downButtonId: '',
+                leftButtonId: 'bt_f7',
+                rightButtonId: 'bt_f9',
+                blurFun: 'F_E_IVBLUR',
+                focusFun: 'F_E_IFOCUS',
+                enterFun: 'F_TODETAIL8',
+                focusImage: 'detail-iti-f.png',
+                blurImage: 'Pixel.png'
+            },
+
+            {
+                id: 'bt_f9',
+                upButtonId: '',
+                downButtonId: '',
+                leftButtonId: 'bt_f8',
+                rightButtonId: 'torightpageend9',
+                blurFun: 'F_E_IVBLUR',
+                focusFun: 'F_E_IFOCUS',
+                enterFun: 'F_TODETAIL9',
+                focusImage: 'detail-iti-f.png',
+                blurImage: 'Pixel.png'
+            },
+
+            {
+                id: 'torightpageend9',
+                upButtonId: '',
+                downButtonId: '',
+                leftButtonId: '',
+                rightButtonId: 'bt_f0',
+                blurFun: '',
+                focusFun: 'F_TORIGHTPAGEEND',
+                enterFun: '',
+                focusImage: 'Pixel.png',
+                blurImage: 'Pixel.png'
+            },
+            {
+                id: 'bt_pdg',
+                upButtonId: '',
+                downButtonId: '',
+                leftButtonId: '',
+                rightButtonId: '',
+                blurFun: '',
+                focusFun: 'F_F_PFG',
+                enterFun: '',
+                focusImage: 'Pixel.png',
+                blurImage: 'Pixel.png'
+            },
+        ]
+        var go_order_div = "N";
+
+
+        function GOORDER() {
+            //	GO_ORDERJSP('','');
+            var _item_name = '';
+            _item_name = encodeURIComponent(encodeURIComponent(_item_name));
+            GO_ORDERJSP('', '', _item_name);
+        }
+        var order_setime;
+
+        function initdatas() {
+            init();
+            getTJList();
+        }
+        var tj_item_id = new Array();
+
+        function getTJList() { //相关推荐
+            $.get(webset.apiStatic + 'starWorks/7/257.json', function (result) {
+                var json = eval("(" + result + ")");
+                $.each(json.list, function (i, item) {
+                    _SELECT("bt_s" + i).src = item.imagetv;
+                    _SELECT("bt_p" + i).innerHTML = item.title;
+                    if (item.bcharging == "1") {
+                        _SELECT("bt_jb" + i).src = "http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/poster-hy.png";
+                    } else {
+                        _SELECT("bt_jb" + i).src = "http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/poster-mf.png";
+                    }
+                    tj_item_id.push(item.id);
+                    seriesCp_name.push(item.title);
+                    //                        _SELECT("bt_jbr"+i).src="http://pic.juhe.ahct.lv1.vcache.cn/zyjh/http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/jb_"+item.item_corner+".png";
+                    //                    }
+                });
+            }, false);
+        }
+
+        function F_TODETAIL() { //推荐列表enter
+            var i = parseInt(focus_id.replace("bt_f", ""));
+            window.location.href = "action.jsp?action=detail&programa_id=&item_id=" + tj_item_id[i] +
+                "&back=index&prev_focus_id=" + focus_id;
+        }
+
+        var seriesCp_name = new Array();
+
+
+
+        function F_TODETAIL0() {
+            window.location.href =
+                "action.jsp?action=detail&programa_id=&item_id=2998580&itemid=193504&back=index&prev_focus_id=" +
+                focus_id;
+        }
+
+        function F_TODETAIL1() {
+            window.location.href =
+                "action.jsp?action=detail&programa_id=&item_id=13450345&itemid=184&back=index&prev_focus_id=" +
+                focus_id;
+        }
+
+        function F_TODETAIL2() {
+            window.location.href =
+                "action.jsp?action=detail&programa_id=&item_id=2101851&itemid=2261&back=index&prev_focus_id=" +
+                focus_id;
+        }
+
+        function F_TODETAIL3() {
+            window.location.href =
+                "action.jsp?action=detail&programa_id=&item_id=91030001000000010000000000099347&itemid=135708&back=index&prev_focus_id=" +
+                focus_id;
+        }
+
+        function F_TODETAIL4() {
+            window.location.href =
+                "action.jsp?action=detail&programa_id=&item_id=1691804&itemid=113089&back=index&prev_focus_id=" +
+                focus_id;
+        }
+
+        function F_TODETAIL5() {
+            window.location.href =
+                "action.jsp?action=detail&programa_id=&item_id=S1416&itemid=2414&back=index&prev_focus_id=" + focus_id;
+        }
+
+        function F_TODETAIL6() {
+            window.location.href =
+                "action.jsp?action=detail&programa_id=&item_id=2563003&itemid=34506&back=index&prev_focus_id=" +
+                focus_id;
+        }
+
+        function F_TODETAIL7() {
+            window.location.href =
+                "action.jsp?action=detail&programa_id=&item_id=2921255&itemid=113702&back=index&prev_focus_id=" +
+                focus_id;
+        }
+
+        function F_TODETAIL8() {
+            window.location.href =
+                "action.jsp?action=detail&programa_id=&item_id=17922463&itemid=191749&back=index&prev_focus_id=" +
+                focus_id;
+        }
+
+        function F_TODETAIL9() {
+            window.location.href =
+                "action.jsp?action=detail&programa_id=&item_id=2896675&itemid=145726&back=index&prev_focus_id=" +
+                focus_id;
+        }
+        initdatas()
+    </script>
+
+    <meta name="GENERATOR" content="MSHTML 11.00.10570.1001">
+</head>
+
+<body  onload="initdatas()">
+    <img style="left: 0px; top: 0px; width: 1280px; height: 720px; position: absolute;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/stardetail-bg.jpg">
+    <div id="DIV_F" style="left: 52px; top: 436px; position: absolute; z-index: 11;">
+        <img id="IMG_F" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/detail-iti-f.png"> </div>
+    <!-- 姓名 -->
+    <div style="left: 406px; top: 46px; position: absolute;">
+        <div style="left: 0px; top: 0px; width: 438px; height: 30px; position: absolute;">
+            <h2 style="margin: 0px; padding: 0px; left: 0px; top: 0px; width: 430px; text-align: left; color: rgb(255, 255, 255); overflow: hidden; font-family: 微软雅黑; font-size: 35.05px; font-weight: normal; position: absolute;">林超贤</h2>
+        </div>
+    </div>
+    <!-- 生日 地区 -->
+
+    <div style="left: 0px; top: 0px; position: absolute;">
+        <h2 style="margin: 0px; padding: 0px; left: 406px; top: 110px; width: 260px; text-align: left; color: rgb(255, 255, 255); overflow: hidden; font-family: 微软雅黑; font-size: 25px; font-weight: normal; position: absolute;">生日: 未知
+        </h2>
+        <h2 style="margin: 0px; padding: 0px; left: 750px; top: 110px; width: 260px; text-align: left; color: rgb(255, 255, 255); overflow: hidden; font-family: 微软雅黑; font-size: 25px; font-weight: normal; position: absolute;">地区: 港台
+        </h2>
+    </div>
+    <!--  <div style="position: absolute;left:260px;top:0px;width:270px;height:30px;">
+                <h2 style="position:absolute;left:0px;top:0px;width:46px; text-align:left; font-size:18px;font-family:微软雅黑; font-weight:normal; color:#ffffff; overflow:hidden; margin:0; padding:0;">导演:</h2>
+                <h2 id="item_director" style="position:absolute;left:46px;top:0px; text-align:left; font-size:18px;font-family:微软雅黑; font-weight:normal; color:#ffffff; overflow:hidden; margin:0; padding:0;"></h2>
+            </div> -->
+    <!-- 演员简介 -->
+    <div style="left: 388px; top: 160px; width: 830px; height: 180px; position: absolute;">
+        <p style="margin: 0px; padding: 0px; left: 0px; top: 0px; text-align: left; color: rgb(255, 255, 255); line-height: 30px; overflow: hidden; font-family: 微软雅黑; font-size: 18px; font-weight: normal; position: absolute;">
+
+            林超贤，香港著名导演、演员、编剧、制片人、武术指导，80年代末期开始为陈嘉上做副导，从《逃学威龙》《霹雳火》《天地雄心》到与陈嘉上联合执导《野兽刑警》，在第18届香港电影金像奖上大出风头，斩获最佳影片和最佳导演两项大奖。后来独立导演的《G4特工》《江湖告急》《重装警察》部部精彩，其中尤以《江湖告急》最受好评。林超贤与影帝张家辉、谢霆锋合作《证人》《线人》大获好评后。2011年携带周杰伦又拍摄《逆战
+            ... 》。2012年与老搭档兼老友张家辉三度合作拍摄《激战》。其他作品有《魔警》《神枪手》《火龙对决》等。
+        </p>
+    </div>
+    <!-- 小视频  海报-->
+    <div style="left: 71px; top: 58px; position: absolute;">
+        <img style="left: 0px; top: 0px; width: 300px; height: 300px; position: absolute;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/7a8c07506bcb720bebc921348604ae17.jpg"> </div>
+    <div id="scrollid" style="top: 425px; width: 1250px; height: 295px; overflow: hidden; position: absolute; z-index: 9;">
+        <!--<img id="toleftpage0" style="width: 1px; height: 1px;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/Pixel.png">-->
+        <img id="toleftpageend9" style="width: 1px; height: 1px;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/Pixel.png">
+        <div id="div_f0" style="left: 44px; display: block; position: absolute;">
+            <img id="bt_s0" style="left: 20px; top: 10px; width: 166px; height: 222px; position: absolute;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/20180429125207263.jpg">
+            <img id="bt_jb0" style="left: 20px; top: 10px; width: 61px; height: 60px; position: absolute; z-index: 9;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/poster-hy.png">
+            <img id="bt_f0" style="left: 0px; top: -10px; width: 206px; height: 262px; position: absolute;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/Pixel.png">
+            <img id="bt_jbr0" style="left: 124px; top: 10px; width: 56px; height: 29px; position: absolute; z-index: 9;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/jb_.png">
+            <p class="p0" id="bt_p0" style="margin: 0px; padding: 0px; left: 20px; top: 247px; width: 166px; height: 25px; text-align: center; color: rgb(255, 255, 255); line-height: 25px; overflow: hidden; font-family: 微软雅黑; font-weight: normal; position: absolute;"></p>
+        </div>
+        <div id="div_f1" style="left: 242px; display: block; position: absolute;">
+            <img id="bt_s1" style="left: 20px; top: 10px; width: 166px; height: 222px; position: absolute;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/7b5865414db14671b19d867a0c99beea.jpg">
+            <img id="bt_jb1" style="left: 20px; top: 10px; width: 61px; height: 60px; position: absolute; z-index: 9;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/poster-mf.png">
+            <img id="bt_f1" style="left: 0px; top: -10px; width: 206px; height: 262px; position: absolute;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/Pixel.png">
+            <img id="bt_jbr1" style="left: 124px; top: 10px; width: 56px; height: 29px; position: absolute; z-index: 9;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/jb_.png">
+            <p class="p0" id="bt_p1" style="margin: 0px; padding: 0px; left: 20px; top: 247px; width: 166px; height: 25px; text-align: center; color: rgb(255, 255, 255); line-height: 25px; overflow: hidden; font-family: 微软雅黑; font-weight: normal; position: absolute;"></p>
+        </div>
+        <div id="div_f2" style="left: 440px; display: block; position: absolute;">
+            <img id="bt_s2" style="left: 20px; top: 10px; width: 166px; height: 222px; position: absolute;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/050E000055F24BCC67BC3C03420943EA.jpg">
+            <img id="bt_jb2" style="left: 20px; top: 10px; width: 61px; height: 60px; position: absolute; z-index: 9;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/poster-mf.png">
+            <img id="bt_f2" style="left: 0px; top: -10px; width: 206px; height: 262px; position: absolute;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/Pixel.png">
+            <img id="bt_jbr2" style="left: 124px; top: 10px; width: 56px; height: 29px; position: absolute; z-index: 9;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/jb_.png">
+            <p class="p0" id="bt_p2" style="margin: 0px; padding: 0px; left: 20px; top: 247px; width: 166px; height: 25px; text-align: center; color: rgb(255, 255, 255); line-height: 25px; overflow: hidden; font-family: 微软雅黑; font-weight: normal; position: absolute;"></p>
+        </div>
+        <div id="div_f3" style="left: 638px; display: block; position: absolute;">
+            <img id="bt_s3" style="left: 20px; top: 10px; width: 166px; height: 222px; position: absolute;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/91030001000000080000000000037887.jpg">
+            <img id="bt_jb3" style="left: 20px; top: 10px; width: 61px; height: 60px; position: absolute; z-index: 9;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/poster-mf.png">
+            <img id="bt_f3" style="left: 0px; top: -10px; width: 206px; height: 262px; position: absolute;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/Pixel.png">
+            <img id="bt_jbr3" style="left: 124px; top: 10px; width: 56px; height: 29px; position: absolute; z-index: 9;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/jb_.png">
+            <p class="p0" id="bt_p3" style="margin: 0px; padding: 0px; left: 20px; top: 247px; width: 166px; height: 25px; text-align: center; color: rgb(255, 255, 255); line-height: 25px; overflow: hidden; font-family: 微软雅黑; font-weight: normal; position: absolute;"></p>
+        </div>
+        <div id="div_f4" style="left: 836px; display: block; position: absolute;">
+            <img id="bt_s4" style="left: 20px; top: 10px; width: 166px; height: 222px; position: absolute;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/7048967595.jpg">
+            <img id="bt_jb4" style="left: 20px; top: 10px; width: 61px; height: 60px; position: absolute; z-index: 9;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/poster-mf.png">
+            <img id="bt_f4" style="left: 0px; top: -10px; width: 206px; height: 262px; position: absolute;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/Pixel.png">
+            <img id="bt_jbr4" style="left: 124px; top: 10px; width: 56px; height: 29px; position: absolute; z-index: 9;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/jb_.png">
+            <p class="p0" id="bt_p4" style="margin: 0px; padding: 0px; left: 20px; top: 247px; width: 166px; height: 25px; text-align: center; color: rgb(255, 255, 255); line-height: 25px; overflow: hidden; font-family: 微软雅黑; font-weight: normal; position: absolute;"></p>
+        </div>
+        <div id="div_f5" style="left: 1034px; display: block; position: absolute;">
+            <img id="bt_s5" style="left: 20px; top: 10px; width: 166px; height: 222px; position: absolute;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/050E000051F0D6856758392B5A043C08.jpg">
+            <img id="bt_jb5" style="left: 20px; top: 10px; width: 61px; height: 60px; position: absolute; z-index: 9;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/poster-hy.png">
+            <img id="bt_f5" style="left: 0px; top: -10px; width: 206px; height: 262px; position: absolute;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/Pixel.png">
+            <img id="bt_jbr5" style="left: 124px; top: 10px; width: 56px; height: 29px; position: absolute; z-index: 9;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/jb_.png">
+            <p class="p0" id="bt_p5" style="margin: 0px; padding: 0px; left: 20px; top: 247px; width: 166px; height: 25px; text-align: center; color: rgb(255, 255, 255); line-height: 25px; overflow: hidden; font-family: 微软雅黑; font-weight: normal; position: absolute;"></p>
+        </div>
+        <img id="torightpage5" style="width: 1px; height: 1px;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/Pixel.png">
+        <img id="toleftpage6" style="width: 1px; height: 1px;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/Pixel.png">
+        <div id="div_f6" style="left: 1232px; display: block; position: absolute;">
+            <img id="bt_s6" style="left: 20px; top: 10px; width: 166px; height: 222px; position: absolute;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/20170208100705857.jpg">
+            <img id="bt_jb6" style="left: 20px; top: 10px; width: 61px; height: 60px; position: absolute; z-index: 9;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/poster-mf.png">
+            <img id="bt_f6" style="left: 0px; top: -10px; width: 206px; height: 262px; position: absolute;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/Pixel.png">
+            <img id="bt_jbr6" style="left: 124px; top: 10px; width: 56px; height: 29px; position: absolute; z-index: 9;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/jb_.png">
+            <p class="p0" id="bt_p6" style="margin: 0px; padding: 0px; left: 20px; top: 247px; width: 166px; height: 25px; text-align: center; color: rgb(255, 255, 255); line-height: 25px; overflow: hidden; font-family: 微软雅黑; font-weight: normal; position: absolute;"></p>
+        </div>
+        <div id="div_f7" style="left: 1430px; display: block; position: absolute;">
+            <img id="bt_s7" style="left: 20px; top: 10px; width: 166px; height: 222px; position: absolute;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/fb026d3a-9bd0-447c-b1b5-272bb51c6281.jpg">
+            <img id="bt_jb7" style="left: 20px; top: 10px; width: 61px; height: 60px; position: absolute; z-index: 9;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/poster-mf.png">
+            <img id="bt_f7" style="left: 0px; top: -10px; width: 206px; height: 262px; position: absolute;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/Pixel.png">
+            <img id="bt_jbr7" style="left: 124px; top: 10px; width: 56px; height: 29px; position: absolute; z-index: 9;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/jb_.png">
+            <p class="p0" id="bt_p7" style="margin: 0px; padding: 0px; left: 20px; top: 247px; width: 166px; height: 25px; text-align: center; color: rgb(255, 255, 255); line-height: 25px; overflow: hidden; font-family: 微软雅黑; font-weight: normal; position: absolute;"></p>
+        </div>
+        <div id="div_f8" style="left: 1628px; display: block; position: absolute;">
+            <img id="bt_s8" style="left: 20px; top: 10px; width: 166px; height: 222px; position: absolute;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/B88CF013789A47D88D95A9FA75407637.jpg">
+            <img id="bt_jb8" style="left: 20px; top: 10px; width: 61px; height: 60px; position: absolute; z-index: 9;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/poster-hy.png">
+            <img id="bt_f8" style="left: 0px; top: -10px; width: 206px; height: 262px; position: absolute;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/Pixel.png">
+            <img id="bt_jbr8" style="left: 124px; top: 10px; width: 56px; height: 29px; position: absolute; z-index: 9;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/jb_.png">
+            <p class="p0" id="bt_p8" style="margin: 0px; padding: 0px; left: 20px; top: 247px; width: 166px; height: 25px; text-align: center; color: rgb(255, 255, 255); line-height: 25px; overflow: hidden; font-family: 微软雅黑; font-weight: normal; position: absolute;"></p>
+        </div>
+        <div id="div_f9" style="left: 1826px; display: block; position: absolute;">
+            <img id="bt_s9" style="left: 20px; top: 10px; width: 166px; height: 222px; position: absolute;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/20180108103732363.jpg">
+            <img id="bt_jb9" style="left: 20px; top: 10px; width: 61px; height: 60px; position: absolute; z-index: 9;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/poster-mf.png">
+            <img id="bt_f9" style="left: 0px; top: -10px; width: 206px; height: 262px; position: absolute;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/Pixel.png">
+            <img id="bt_jbr9" style="left: 124px; top: 10px; width: 56px; height: 29px; position: absolute; z-index: 9;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/jb_.png">
+            <p class="p0" id="bt_p9" style="margin: 0px; padding: 0px; left: 20px; top: 247px; width: 166px; height: 25px; text-align: center; color: rgb(255, 255, 255); line-height: 25px; overflow: hidden; font-family: 微软雅黑; font-weight: normal; position: absolute;"></p>
+        </div>
+        <img id="torightpageend9" style="width: 1px; height: 1px;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/Pixel.png">
+    </div>
+    <!-- 返回按钮 -->
+    <div style="left: 0px; top: 0px; position: absolute;">
+        <img id="bt_pdg" style="left: 0px; top: 0px; position: absolute;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/Pixel.png"> </div>
+    <img id="collect" style="left: 680px; top: 260px; position: absolute; z-index: 99;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/Pixel.png">
+    <img id="visitRecord" style="left: 1px; top: 1px; position: absolute;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/record.png?action=visitUrlRecord&amp;visitPathname=%252FC%253A%252FUsers%252FAdministrator%252FDesktop%252F%2525E9%2525A1%2525B5%2525E9%25259D%2525A22%252FWelcome-star.htm&amp;visitSearch=&amp;t=1526023857959"
+        width="0" height="0">
+    <div id="test" style="left: 20px; top: 400px; color: rgb(255, 0, 0); font-size: 30px; position: absolute;"></div>
+    <script type="text/javascript">
+        setTimeout("window.focus()", 5000);
+        visitRecord();
+        visitUrlRecord();
+        setTimeout('getPrevUrl()', 500);
+        smallWidowItemId = '';
+        order_setime = setTimeout('goOrderHint()', 420000);
+    </script>
+
+</body>
+
+</html>

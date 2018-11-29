@@ -1,0 +1,447 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+    <meta content="IE=5.0000" http-equiv="X-UA-Compatible">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="page-view-size" content="1280*720">
+    <title>smallwindow</title>
+    <script src="js/public.js" type="text/javascript"></script>
+    <script src="js/ajax.min.js" type="text/javascript"></script>
+    <script src="js/webxiri_1.0.4.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        //        var playUrl='http://ahvod.voole.com.lv1.vcache.cn/1526108687/b1b4e6f013af91f698687fcbecb5037d/play?fid=bd4cb3736857c9f8b6921fbc869034a3&keyid=135372&stamp=1526108687&auth=6caba6f89099539475e09a81e9696066&s=1&ext=oid:300079,eid:600001,code:B2BSTBOX_movie_index&hy=ah&uid=shengyuan';//?stbCode='+userId+"&stbModel="+stbModel;
+        var playUrl = 'http://live.hkstv.hk.lxdns.com/live/hks/playlist.m3u8';
+
+        var mp;
+        var nativePlayerInstanceID;
+        try {
+            mp = new MediaPlayer();
+            nativePlayerInstanceID = mp.getNativePlayerInstanceID(); //读取本地的媒体播放实例的标识。保留这个标识   以便在跨页面时，标识这个本地的媒体播放实例
+        } catch (ex) {}
+
+        var watch_time = parseInt('0', 10);
+
+        function init_mp() {
+            try {
+                mp.setAllowTrickmodeFlag(0); //设置是否允许trick操作。 0：允许 1：不允许
+
+                mp.setVideoDisplayMode(0); //0:按setVideoDisplayArea中设定的left,top,width,height,来显示视频   1：全屏显示 2：按宽度显示  指在不改变原有图像 纵横比的情况下按全屏宽度显示   3：按高度显示，指在不改变原有图像 纵横比的情况下按全屏高度显示 255: 视频显示窗口将被关闭。
+                mp.setVideoDisplayArea(62, 52, 532, 314); //left,top,width,height
+
+                mp.refreshVideoDisplay(); //刷新
+                var media = '[{mediaUrl:"' + playUrl +
+                    '",mediaCode: "vod1",mediaType:2,audioType:1,videoType:3,streamType:2,drmType:1,fingerPrint:1,copyProtection:0,allowTrickmode:1,startTime:0,endTime:0,entryID:"entry1"}]';
+                mp.setSingleMedia(media); //设置媒体播放器播放媒体内容
+                mp.playFromStart(); //从媒体起始点播放
+                if (watch_time > 10) {
+                    if ('small' != 'small') {
+                        setTimeout('F_WATCH_TIME2()', 1200);
+                    } else {
+                        //	setTimeout('F_WATCH_TIME()',800);
+                    }
+                } else {
+                    if ('small' != 'small') {
+                        _SELECT('bt_ordertips').focus();
+                    }
+                }
+            } catch (ex) {}
+
+            window.parent.focus();
+
+        }
+
+        var t1 = 0;
+        var t2 = null;
+        var t3 = 0;
+        var play_states = "play";
+        var total_width = 1162;
+        var show_times = 0;
+
+        function F_C_0(current_time) {
+            var vod_time_info = parseInt(current_time);
+            if (vod_time_info == 0) {
+                return "00:00:00";
+            }
+            var vod_total_hours = vod_time_info / 3600;
+            vod_total_hours = parseInt(vod_total_hours);
+
+            if (("" + vod_total_hours).length == 1) {
+                vod_total_hours = "0" + vod_total_hours;
+            }
+            var str_vod_total_hours = vod_total_hours;
+            vod_total_hours = parseInt(vod_total_hours, 10);
+            var vod_total_minutes = (vod_time_info - vod_total_hours * 3600) / 60;
+            vod_total_minutes = parseInt(vod_total_minutes);
+            if (("" + vod_total_minutes).length == 1) {
+                vod_total_minutes = "0" + vod_total_minutes;
+            }
+            var mm = vod_time_info - vod_total_hours * 3600 - vod_total_minutes * 60;
+            var mm_str = "";
+            if ((mm + "").length == 1) {
+                mm_str = "0" + mm;
+            } else {
+                mm_str = mm + "";
+            }
+            return str_vod_total_hours + ":" + vod_total_minutes + ":" + mm_str;
+        }
+
+
+        //感觉没调用
+        function F_C_1() {
+            var total_times = mp.getMediaDuration(); //获取当前播放的媒体总时长
+            var curr_times = mp.getCurrentPlayTime(); //获取播放到的当前时间点
+            if (total_times && curr_times && curr_times > 0) {
+                var range = total_width / total_times;
+                var yet_curr_width = Math.round(range * curr_times);
+                //_SELECT("play_icon_id").style.left = 120+yet_curr_width+"px";
+                _SELECT("played_id").style.width = yet_curr_width + "px";
+                var curtime = F_C_0(curr_times);
+                //_SELECT("show_time_id").style.left = 116+yet_curr_width+"px";
+                _SELECT("show_time_id").innerHTML = curtime;
+                var duration_str = F_C_0(total_times);
+                _SELECT("end_time_id").innerHTML = "/" + duration_str;
+            } else {
+
+            }
+        }
+
+        //感觉没调用
+        function F_C_2() {
+            show_times = mp.getCurrentPlayTime(); ////获取播放到的当前时间点
+            F_C_1();
+            _SELECT("process_bar_id").style.display = "block";
+        }
+
+        //父级调用
+        function F_M_0(flag) { //音量加减
+            try {
+                var volume = mp.getVolume(); //获取当前系统音量 0-100
+                if (flag == '+') {
+                    if (volume < 96) {
+                        volume = volume + 6;
+                        if (volume > 96) volume = 96;
+                    }
+                } else if (flag == '-') {
+                    if (volume > 0) {
+                        volume = volume - 6;
+                        if (volume < 0) {
+                            return;
+                        }
+                    }
+                }
+                var img_volume = Math.floor(volume / 6) + 1;
+                mp.setVolume(volume); //设置当前系统音量 0-100
+
+                //不存在img_volume  div_volume
+                _SELECT("img_volume").src = "http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/volumn_icon/voice_control" + img_volume + ".png"; //音量进程图1-17
+                _SELECT("div_volume").style.display = "block";
+                if (t1 != 0) clearTimeout(t1);
+                t1 = setTimeout(function () {
+                    _SELECT("div_volume").style.display = "none";
+                }, 3000);
+            } catch (e) {}
+        }
+
+
+        //没看见哪里调用了
+        function F_M_1(key) {
+            if (play_states == "play") {
+                mp.pause(); //暂停
+                play_states = "pause";
+                F_C_2();
+                //return;
+            }
+            var total_times = mp.getMediaDuration(); //获取当前播放的媒体的 总时长
+            if (key == "F") {
+                show_times = parseInt(show_times, 10) + 30;
+                if (show_times > parseInt(total_times, 10)) show_times = parseInt(total_times, 10);
+            } else if (key == "R") {
+                show_times = parseInt(show_times, 10) - 30;
+                if (show_times < 0) show_times = 0;
+            }
+            var range = total_width / parseInt(total_times, 10);
+            var show_curr_width = Math.round(range * show_times);
+            _SELECT("played_id").style.width = show_curr_width + "px";
+            //_SELECT("play_icon_id").style.left = 120+show_curr_width+"px";
+            //_SELECT("show_time_id").style.left = 120+show_curr_width+"px";
+            _SELECT("show_time_id").innerHTML = F_C_0(show_times);
+            var duration_str = F_C_0(total_times);
+            _SELECT("end_time_id").innerHTML = "/" + duration_str;
+            if (t2 != null) clearTimeout(t2);
+            t2 = setTimeout(function () {
+                var play_point = parseInt(show_times, 10);
+                mp.playByTime(1, play_point, 1); //当前媒体的某个时间点开始播放 playByTime(type, timestamp,speed) timestamp：从媒体起始点开始计算 的相对时间；    speed:播放速度，可选
+                play_states = "play";
+                _SELECT("process_bar_id").style.display = "none";
+                //	updateWatchRecord();
+            }, 600);
+        }
+
+
+        //停止播放
+        function F_M_10() {
+            mp.stop(); //停止播放
+            mp.releaseMediaPlayer(nativePlayerInstanceID); //释放机顶盒MediaPlayer的对象，结束对应MediaPlayer的生命周期   返回0释放成功  返回-1释放失败
+        }
+
+        function backPrograma() { //退出
+            updateWatchRecord();
+            setTimeout("backPrograma2()", 1000);
+            //  F_M_10();
+            //	window.location.href = "/zyjh/playEnd.jsp";
+        }
+
+        function backPrograma2() { //退出播放做的操作
+            F_M_10();
+            window.location.href = "/zyjh/playEnd.jsp";
+        }
+
+        function watchRecord() { //不太清楚干嘛的
+            var t = (new Date()).valueOf();
+            _SELECT('watchRecord').src = "http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/record.png?action=watchRecord&position=1&record=yes&t=" + t;
+            if (watch_time > 10) {
+                _SELECT('watchRecord').src = "http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/record.png?action=updateWatchRecord&record=yes&position=1&t=" + t +
+                    "&watch_time=" + watch_time;
+            }
+        }
+
+        var _ut = 0;
+
+        function updateWatchRecord() { //提交当前播放时间
+            if (_ut > 0) {
+                return;
+            }
+            _ut++;
+            var t = (new Date()).valueOf();
+            var currentPlayTime = mp.getCurrentPlayTime(); //获取媒体播放到的当前 时间点
+            var total_times = mp.getMediaDuration(); //获取当前播放的媒体的 总时长
+            if (total_times - currentPlayTime <= 10) currentPlayTime = 'end';
+            //	_SELECT('watchRecord').src="/zyjh/http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/record.png?user_id=test&action=updateWatchRecord&record=yes&position=1&t="+ t+"&watch_time="+currentPlayTime;
+            var url = "/zyjh/jquery.jsp?user_id=test&action=updateWatchRecord&record=yes&position=1&t=" + t +
+                "&watch_time=" + currentPlayTime;
+            $.post(url, function (result) {
+
+            });
+        }
+        /*
+         if('small'=='small'){
+         setInterval("updateWatchRecord()",5000);
+         }else{
+         setTimeout("updateWatchRecord()",5000);
+         }*/
+        //setTimeout("updateWatchRecord()",5000);
+
+        //感觉没调用
+        function F_WATCH_TIME() {
+            var total_times = mp.getMediaDuration(); //获取当前播放的媒体的 总时长
+            if (total_times - watch_time >= 20) {
+                mp.pause(); //暂停
+
+                mp.setVideoDisplayMode(0); //按 setVideoDisplayArea()中设定的 Height, Width, Left, Top 属性所指定的 位置和大小来显示视频
+                mp.setVideoDisplayArea(62, 52, 532, 314);
+                mp.refreshVideoDisplay(); //刷新
+
+                mp.playByTime(1, watch_time, 1); //当前媒体的某个时间点开始播放
+            }
+        }
+
+        ////////////////////////////////////////////////
+
+
+        //没调用
+        function getVideoCharge() {
+            return 'N';
+        }
+
+        //没调用
+        function watchFocus() {
+            if ('small' != 'small') {
+                _SELECT("videoNameTips").style.display = "block";
+                vnt = setTimeout(function () {
+                    _SELECT("videoNameTips").style.display = "none";
+                }, 6000);
+            }
+        }
+
+        function order_soon() { //立即订购按钮 enter
+            var itemname = '哈利波特与魔法石';
+            itemname = encodeURIComponent(encodeURIComponent(itemname));
+            window.location.href = "/zyjh/order/userOrder.jsp?item_cp=voole&item_id=4136&item_name=" + itemname;
+            //window.location.href="/zyjh/go_order.jsp";
+        }
+        ////////////////////////////
+        var seriesCp_name = new Array();
+
+        function FYY() {
+            var scene = {
+                _scene: "com.iflytek.xiri.MGTV",
+                _commands: {
+                    "_PLAY": ["$P(_PLAY)"],
+                    "_EPISODE": ["$P(_EPISODE)"],
+                    "test1": ["测试1"],
+                    "test2": ["测试2"]
+                },
+                _feedbacks: {
+                    "test1": '为你测试1',
+                    "test2": '为你测试2'
+                }
+            };
+            var callback = function (intent) {
+                var _command = intent['_command'];
+                if (_command == '_PLAY') {
+                    var action = intent['_action'];
+                    if (action == 'PLAY') {
+                        mp.resume(); //从当前媒体的暂停/快进/快退状 态恢复正常播放
+                        return;
+                    } else if (action == 'PAUSE') {
+                        mp.pause(); //暂停
+                        return;
+                    } else if (action == 'RESUME') {
+                        mp.resume(); //从当前媒体的暂停/快进/快退状 态恢复正常播放
+                        return;
+                    } else if (action == 'RESTART') {
+                        var index = 1;
+                        mp.playByTime(1, index, 1); //当前媒体的某个时间点开始播放
+                        return;
+                    } else if (action == 'SEEK') {
+                        var index = intent['position'];
+                        mp.playByTime(1, index, 1);
+                        return;
+                    } else if (action == 'FORWARD') {
+                        var _index = intent['offset'];
+                        var _play_point = parseInt(mp.getCurrentPlayTime(), 10);
+                        mp.playByTime(1, (_play_point + _index), 1);
+                        return;
+                    } else if (action == 'BACKWARD') {
+                        var _index = intent['offset'];
+                        var _play_point = parseInt(mp.getCurrentPlayTime(), 10);
+                        mp.playByTime(1, (_play_point - _index), 1);
+                        return;
+                    } else if (action == 'EXIT') {
+                        backPrograma();
+                        return;
+                    } else if (action == 'INDEX') {
+                        var index = intent['index'];
+                        F_KEY_GO_PAGE(index);
+                        return;
+                    }
+                } else if (_command == '_EPISODE') {
+                    var action = intent['_action'];
+                    if (action == 'PREV') {
+                        //	_SELECT('test').innerHTML = '1111111111111111111111';
+                        var arg = 1 - 1;
+                        F_YY_PLAY(arg);
+                        return;
+                    } else if (action == 'NEXT') {
+                        //	_SELECT('test').innerHTML = '222222222222222222222222222';
+                        var arg = 1 + 1;
+                        F_YY_PLAY(arg);
+                        return;
+                    } else if (action == 'INDEX') {
+                        //	_SELECT('test').innerHTML = '3333333333333333333';
+                        var arg = intent['index'];
+                        F_YY_PLAY(arg);
+                        return;
+                    }
+                }
+                _H_F(_command);
+                DOBUTTONENTERFUN(_command);
+            }
+            var listener = new Xiri.Listener(callback);
+            listener.regist(scene);
+        }
+        ////////////////////////////
+    </script>
+
+    <meta name="GENERATOR" content="MSHTML 11.00.10570.1001">
+</head>
+
+<body  onload="init_mp();" onunload="F_M_10()">
+    <div id="watch_time" style="left: 320px; top: 130px; display: none; position: absolute;">
+        <img style="left: 0px; top: 0px; width: 696px; height: 401px; position: absolute;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/window-bg.png" border="0">
+        <a id="a_f0" style="left: 6px; top: 8px; position: absolute;" onfocus="MM_swapImage('im_jx','','http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/window-watchbtn-f.png',1);"
+            onblur="MM_swapImgRestore();" href="javascript:F_E_F0()">
+            <img width="1" height="1" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/Pixel.png" border="0"> </a>
+        <img id="im_jx" style="left: 90px; top: 60px; position: absolute;" src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/Pixel.png " border="0 ">
+    <img style="left: 90px; top: 60px; position: absolute; " src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/window-continue.png " border="0 ">
+    <a id="a_f1 " style="left: 206px; top: 8px; position: absolute; " onfocus="MM_swapImage( 'im_ct', '',
+            'http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/window-watchbtn-f.png',1); " onblur="MM_swapImgRestore(); " href="javascript:F_E_F1() ">
+        <img width="1 " height="1 " src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/Pixel.png " border="0 ">	 </a>
+    <img id="im_ct " style="left: 360px; top: 60px; position: absolute; " src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/Pixel.png " border="0 ">
+    <img style="left: 360px; top: 60px; position: absolute; " src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/window-start.png " border="0 ">
+    <div id="prev_watch " style="margin: 0px; padding: 0px; left: 160px; top: 260px; width: 370px; height: 156px; text-align:
+            center; color: rgb(255, 255, 255); line-height: 35px; overflow: hidden; font-size: 23px; font-weight: normal; position:
+            absolute; "></div>
+    <div id="watch_tips " style="margin: 0px; padding: 0px; left: 160px; top: 290px; width: 370px; height: 156px; text-align:
+            center; color: rgb(255, 255, 255); line-height: 35px; overflow: hidden; font-size: 23px; font-weight: normal; position:
+            absolute; "></div></div><img width="178 " height="178 " id="play_pause " style="left: 550px; top: 271px; position:
+            absolute; " src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/Pixel.png ">
+<div id="test " style="left: 50px; top: 300px; color: rgb(255, 0, 0); font-size: 30px; position: absolute; "></div>
+<div id="test2 " style="left: 50px; top: 350px; color: rgb(255, 0, 255); font-size: 30px; position: absolute; "></div>
+<div id="test3 " style="left: 50px; top: 400px; color: rgb(255, 0, 255); font-size: 30px; position: absolute; "></div>
+<div id="test4 " style="left: 50px; top: 450px; color: rgb(255, 0, 255); font-size: 30px; position: absolute;
+            "></div><img id="watchRecord " style="left: 1px; top: 1px; position: absolute; " src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/record.png?action=watchRecord&amp;position=1&amp;record=yes&amp;t=1526108886820 ">
+<div id="xj_tips " style="left: 0px; top: 660px; width: 1280px; height: 50px; text-align: center; display: none; position:
+            absolute; opacity: 0.8; background-color: rgb(0, 0, 0); "><font style="text-align: center; color: rgb(255, 255, 255);
+            font-size: 32px; "></font>
+</div>
+<div id="order_tips " style="left: 0px;top: 563px;width: 1280px;/* display: none; */position: absolute; "><a id="bt_ordertips
+            " style="left: 6px; top: 8px; position: absolute; " onfocus="MM_swapImage( 'bt_ordertips_f', '',
+            'http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/window-order-bg_f.png',1); " onblur="MM_swapImgRestore(); " href="javascript:order_soon() "><img width="1 " height="1 " src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/Pixel.png
+            " border="0 ">	 </a>
+    <img id="bt_ordertips_f " style="left: 730px; top: 85px; position: absolute; z-index: 10; " src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/Pixel.png.png
+            " border="0 ">	 <img width="1280 " height="175 " style="left: 0px; top: 0px; position: absolute; " src="http://epgpic.kanketv.com.ahct.lv1.vcache.cn/itv-epg/images/window-order-bg.png ">
+</div>
+<script type="text/javascript ">
+    setTimeout('watchRecord()',10000);
+
+    if('small'!='small'){
+        vnt=setTimeout(function(){
+            _SELECT("videoNameTips ").style.display = "none ";
+            if('dy'=='ds' || 'dy'=='js' || 'dy'=='zy'){
+                _SELECT("xj_tips ").style.display = "none ";
+            }
+        },6000);
+        setInterval(function(){
+            var currentPlayTime=mp.getCurrentPlayTime();
+            var total_times = mp.getMediaDuration();
+            if(total_times-currentPlayTime<=30)
+                _SELECT("palyNextTips ").style.display = "block ";
+        },10000);
+    }
+    var tryWatch=420;
+    if('N'!='N'&&'small'!='small'){
+        var orderMark = "unOrder ";
+        if("dy "=='dy'){//电影单点鉴权
+            orderMark = 'month';
+        }else{//其它栏目
+            orderMark = 'month';
+        }
+        if(orderMark=='unOrder'){
+            setInterval(function(){
+                if(show_times>tryWatch||mp.getCurrentPlayTime()>tryWatch){
+                    if('dy'=='dy'){
+                        var itemname='哈利波特与魔法石';
+                        //_SELECT("test ").innerHTML = itemname;
+                        itemname=encodeURIComponent(encodeURIComponent(itemname));
+                        window.location.href="/zyjh/order/userOrder.jsp?item_cp=voole&item_id=4136&item_name="+itemname;
+                    }else{
+                        window.location.href=" /zyjh/order/action.jsp?item_cp=voole&item_id=5204284 ";
+                    }
+                };
+                if('dy'=='dy'){
+                    _SELECT("order_tips ").style.display = "block ";
+                }
+            },1000);
+        }
+    }
+    if('dy'=='ds' || 'dy'=='js' || 'dy'=='zy'){
+        _SELECT("xj_tips ").style.display = "block ";
+    }
+//    FYY();
+</script>
+
+</body></html>
